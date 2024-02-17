@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:label="fragment_home"
+        android:name="com.example.adminblinkitclone.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/addProductsFragment"
+        android:label="fragment_add_products"
+        android:name="com.example.adminblinkitclone.AddProductsFragment"
+        tools:layout="@layout/fragment_add_products" />
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:label="fragment_orders"
+        android:name="com.example.adminblinkitclone.OrdersFragment"
+        tools:layout="@layout/fragment_orders" />
+</navigation>
