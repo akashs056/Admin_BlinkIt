@@ -36,6 +36,7 @@
             android:drawableStart="@drawable/baseline_search_24"
             android:drawablePadding="10dp"
             android:hint="Search"
+            android:singleLine="true"
             android:background="@android:color/transparent"
             android:padding="10dp"
             android:layout_gravity="center"
@@ -65,6 +66,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:spanCount="2"
         app:layout_constraintTop_toBottomOf="@+id/cateoryRv" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/productsRv"
+        app:layout_constraintEnd_toEndOf="@+id/productsRv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cateoryRv">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/sample_shimmer_rv"/>
+            <include layout="@layout/sample_shimmer_rv"/>
+            <include layout="@layout/sample_shimmer_rv"/>
+            <include layout="@layout/sample_shimmer_rv"/>
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <TextView
         android:id="@+id/textView2"

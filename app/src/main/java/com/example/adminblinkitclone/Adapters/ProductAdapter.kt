@@ -3,15 +3,18 @@ package com.example.adminblinkitclone.Adapters
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.denzcoskun.imageslider.models.SlideModel
+import com.example.adminblinkitclone.FilteringProducts
 import com.example.adminblinkitclone.Models.Product
 import com.example.adminblinkitclone.databinding.SampleProductsBinding
 
-class ProductAdapter:RecyclerView.Adapter<ProductAdapter.viewHolder>() {
+class ProductAdapter(val onEditButtonClicked: (Product) -> Unit) :RecyclerView.Adapter<ProductAdapter.viewHolder>() ,Filterable {
     class viewHolder(val binding:SampleProductsBinding) :ViewHolder(binding.root){}
 
     val difutil =object :DiffUtil.ItemCallback<Product>(){
@@ -48,6 +51,16 @@ class ProductAdapter:RecyclerView.Adapter<ProductAdapter.viewHolder>() {
             tvProductQuantity.text=quantity
             tvProductPrice.text="₹"+product.productPrice
         }
+        holder.itemView.setOnClickListener {
+            onEditButtonClicked(product)
+        }
 
+    }
+
+    private  val filter : FilteringProducts?=null
+    var originalList = ArrayList<Product>()
+    override fun getFilter(): Filter {
+        if (filter==null) return FilteringProducts(this,originalList)
+        return filter
     }
 }
