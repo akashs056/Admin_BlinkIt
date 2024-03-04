@@ -19,5 +19,22 @@
         android:id="@+id/ordersFragment"
         android:label="fragment_orders"
         android:name="com.example.adminblinkitclone.OrdersFragment"
-        tools:layout="@layout/fragment_orders" />
+        tools:layout="@layout/fragment_orders" >
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment"
+            app:enterAnim="@anim/from_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.adminblinkitclone.OrderDetailFragment"
+        android:label="fragment_order_detail"
+        tools:layout="@layout/fragment_order_detail" >
+        <action
+            android:id="@+id/action_orderDetailFragment_to_ordersFragment"
+            app:destination="@id/ordersFragment"
+            app:enterAnim="@anim/from_left"
+            app:popUpTo="@id/ordersFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

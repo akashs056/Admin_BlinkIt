@@ -15,7 +15,7 @@ import com.example.adminblinkitclone.Models.Product
 import com.example.adminblinkitclone.databinding.SampleProductsBinding
 
 class ProductAdapter(val onEditButtonClicked: (Product) -> Unit) :RecyclerView.Adapter<ProductAdapter.viewHolder>() ,Filterable {
-    class viewHolder(val binding:SampleProductsBinding) :ViewHolder(binding.root){}
+    class viewHolder(val binding: SampleProductsBinding) :ViewHolder(binding.root){}
 
     val difutil =object :DiffUtil.ItemCallback<Product>(){
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {

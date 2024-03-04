@@ -5,55 +5,65 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.adminblinkitclone.Adapters.OrdersAdapter
+import com.example.adminblinkitclone.Models.OrderedItems
+import com.example.adminblinkitclone.databinding.FragmentHomeBinding
+import com.example.adminblinkitclone.databinding.FragmentOrdersBinding
+import com.example.adminblinkitclone.viewModels.AdminViewModel
+import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [OrdersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class OrdersFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var binding:FragmentOrdersBinding
+    private val viewModel:AdminViewModel by viewModels()
+    private lateinit var adapter: OrdersAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_orders, container, false)
+    ): View {
+        binding=FragmentOrdersBinding.inflate(inflater,container,false)
+        getAllOrders()
+         return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OrdersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            OrdersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun getAllOrders() {
+        lifecycleScope.launch {
+            viewModel.getAllOrders().collect{orderList->
+                if (orderList.isNotEmpty()){
+                    val orderedList=ArrayList<OrderedItems>()
+                    for(orders in orderList){
+                        val title= StringBuilder()
+                        var totalPrice=0;
+                        for(products in orders.orderList!!){
+                            val price=products.productPrice?.substring(1)?.toInt()
+                            val itemCount=products.productCount!!
+                            totalPrice+=(price?.times(itemCount)!!)
+
+                            title.append("${products.productCategory}, ")
+                        }
+                        val orderedItem=OrderedItems(
+                            orders.orderId,orders.orderDate,orders.orderStatus,title.toString(),totalPrice,orders.userAddress
+                        )
+                        orderedList.add(orderedItem)
+                    }
+                    adapter=OrdersAdapter(requireContext(),::showOrderDetail)
+                    binding.RVyourOrders.adapter=adapter
+                    adapter.differ.submitList(orderedList)
                 }
             }
+        }
     }
+
+
+    fun showOrderDetail(orders: OrderedItems){
+        val bundle=Bundle()
+        bundle.putInt("status",orders.itemStatus!!)
+        bundle.putString("orderId", orders.orderId)
+        bundle.putString("address", orders.address)
+        findNavController().navigate(R.id.action_ordersFragment_to_orderDetailFragment,bundle)
+    }
+
 }
